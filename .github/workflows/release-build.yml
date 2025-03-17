@@ -6,20 +6,7 @@ on:
 
 jobs:
   build-and-release:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - os: ubuntu-latest
-            platform: linux
-            ext: ''
-          - os: macos-latest
-            platform: mac
-            ext: ''
-          - os: windows-latest
-            platform: win
-            ext: '.exe'
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -40,7 +27,7 @@ jobs:
       - name: Build application
         run: |
           npm run build
-          electron-builder --${{ matrix.platform }} --publish never
+          electron-builder --win --publish never
 
       - name: Get release info
         id: get_release
@@ -48,80 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload release assets for Linux
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/github-script@v7.0.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-            const distPath = path.join(process.cwd(), 'dist');
-            
-            const uploadAsset = async (file) => {
-              const filePath = path.join(distPath, file);
-              const fileStats = fs.statSync(filePath);
-              const fileStream = fs.createReadStream(filePath);
-              
-              await github.rest.repos.uploadReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: ${{ steps.get_release.outputs.id }},
-                name: file,
-                data: fileStream,
-                headers: {
-                  'content-type': 'application/octet-stream',
-                  'content-length': fileStats.size
-                }
-              });
-            };
-            
-            // Upload AppImage and deb files
-            const files = fs.readdirSync(distPath);
-            for (const file of files) {
-              if (file.endsWith('.AppImage') || file.endsWith('.deb')) {
-                await uploadAsset(file);
-              }
-            }
-
-      - name: Upload release assets for macOS
-        if: matrix.os == 'macos-latest'
-        uses: actions/github-script@v7.0.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-            const distPath = path.join(process.cwd(), 'dist');
-            
-            const uploadAsset = async (file) => {
-              const filePath = path.join(distPath, file);
-              const fileStats = fs.statSync(filePath);
-              const fileStream = fs.createReadStream(filePath);
-              
-              await github.rest.repos.uploadReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: ${{ steps.get_release.outputs.id }},
-                name: file,
-                data: fileStream,
-                headers: {
-                  'content-type': 'application/octet-stream',
-                  'content-length': fileStats.size
-                }
-              });
-            };
-            
-            // Upload DMG file
-            const files = fs.readdirSync(distPath);
-            for (const file of files) {
-              if (file.endsWith('.dmg')) {
-                await uploadAsset(file);
-              }
-            }
-
       - name: Upload release assets for Windows
-        if: matrix.os == 'windows-latest'
         uses: actions/github-script@v7.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
