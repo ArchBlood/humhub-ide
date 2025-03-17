@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>HumHub IDE</title>
+  <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+  <div class="container">
+          <div class="sidebar">
+      <div class="file-explorer">
+        <h3>Explorer</h3>
+        <div id="file-tree">
+          <!-- File tree will go here -->
+          <div class="placeholder-text">Use File > Open to open a file</div>
+        </div>
+      </div>
+      
+      <div class="snippets-panel">
+        <h3>Snippets</h3>
+        <div class="snippet-category">
+          <div class="category-header">HumHub Snippets</div>
+          <div class="snippet-list">
+            <div class="snippet-item" data-snippet="humhub-module">Module</div>
+            <div class="snippet-item" data-snippet="humhub-widget">Widget</div>
+            <div class="snippet-item" data-snippet="humhub-activity">Activity</div>
+            <div class="snippet-item" data-snippet="humhub-controller">Controller</div>
+            <div class="snippet-item" data-snippet="humhub-stream">Stream Action</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="tabs">
+        <div class="tab active">untitled</div>
+      </div>
+      <div class="editor-container">
+        <textarea id="editor" spellcheck="false"></textarea>
+        <div class="line-numbers" id="line-numbers"></div>
+      </div>
+      <div class="status-bar">
+        <div class="status-item" id="cursor-position">Ln 1, Col 1</div>
+        <div class="status-item" id="file-type">Plain Text</div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="static/js/renderer.js"></script>
+</body>
+</html>
