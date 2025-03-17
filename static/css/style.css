@@ -1,0 +1,165 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #252526;
+  border-right: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-explorer {
+  height: 40%;
+  overflow: auto;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+.snippets-panel {
+  height: 60%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.snippet-category {
+  margin-bottom: 15px;
+}
+
+.category-header {
+  font-weight: bold;
+  color: #569cd6;
+  padding: 5px 0;
+  border-bottom: 1px solid #333;
+  margin-bottom: 5px;
+}
+
+.snippet-list {
+  padding-left: 5px;
+}
+
+.snippet-item {
+  padding: 3px 5px;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 3px;
+}
+
+.snippet-item:hover {
+  background-color: #2a2d2e;
+}
+
+.file-explorer h3 {
+  margin-top: 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #333;
+}
+
+.placeholder-text {
+  color: #666;
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs {
+  height: 35px;
+  background-color: #2d2d2d;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid #333;
+}
+
+.tab {
+  background-color: #2d2d2d;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  border-right: 1px solid #333;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.tab.active {
+  background-color: #1e1e1e;
+  border-top: 1px solid #569cd6;
+}
+
+.editor-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+#editor {
+  position: absolute;
+  top: 0;
+  left: 30px;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  margin: 0;
+  border: none;
+  resize: none;
+  outline: none;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  tab-size: 4;
+  width: calc(100% - 30px);
+  white-space: pre;
+  overflow: auto;
+}
+
+.line-numbers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  bottom: 0;
+  background-color: #1e1e1e;
+  color: #858585;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: right;
+  padding: 5px 5px 5px 0;
+  border-right: 1px solid #333;
+  overflow: hidden;
+  user-select: none;
+}
+
+.status-bar {
+  height: 22px;
+  background-color: #007acc;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.status-item {
+  margin-right: 15px;
+}
