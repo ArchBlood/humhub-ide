@@ -1,0 +1,14 @@
+{
+  "name": "humhub-ide",
+  "version": "1.0.0",
+  "description": "Electron IDE for HumHub",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "electron": "^28.2.0"
+  }
+}
