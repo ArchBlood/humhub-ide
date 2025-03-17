@@ -29,11 +29,18 @@ jobs:
           npm run build
           electron-builder --win --publish never
 
-      - name: Get release info
+      - name: Get release info (GitHub API)
         id: get_release
-        uses: bruceadams/get-release@vv1.3.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const release = await github.rest.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: context.payload.release.tag_name
+            });
+            return release.data.id;
 
       - name: Upload release assets for Windows
         uses: actions/github-script@v7.0.1
@@ -52,7 +59,7 @@ jobs:
               await github.rest.repos.uploadReleaseAsset({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                release_id: ${{ steps.get_release.outputs.id }},
+                release_id: ${{ steps.get_release.outputs.result }},
                 name: file,
                 data: fileStream,
                 headers: {
