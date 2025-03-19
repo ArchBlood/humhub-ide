@@ -1,14 +1,51 @@
 {
   "name": "humhub-ide",
   "version": "1.0.0",
-  "description": "Electron IDE for HumHub",
+  "description": "Specialized IDE for HumHub development",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "author": "",
+  "keywords": [
+    "humhub",
+    "ide",
+    "electron",
+    "code-editor"
+  ],
+  "author": "Green Meteor",
   "license": "GPL-3.0-only",
+  "dependencies": {
+    "codemirror": "^5.65.3"
+  },
   "devDependencies": {
-    "electron": "^28.2.0"
+    "electron": "^22.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "net.greenmeteor.ide",
+    "productName": "HumHub IDE",
+    "publisherName": "Green Meteor",
+    "copyright": "Copyright © 2025 Green Meteor",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "target": "nsis",
+      "certificateFile": "./cert.pfx",
+      "certificatePassword": "${CERTIFICATE_PASSWORD}",
+      "signingHashAlgorithms": ["sha256"]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development"
+    }
   }
 }

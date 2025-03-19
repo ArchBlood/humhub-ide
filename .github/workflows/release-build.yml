@@ -26,7 +26,23 @@ jobs:
       - name: Install Electron Builder
         run: npm install -g electron-builder
 
+      - name: Generate self-signed certificate
+        id: generate_cert
+        run: |
+          $cert_password = "$(New-Guid)"
+          echo "CERTIFICATE_PASSWORD=$cert_password" >> $env:GITHUB_ENV
+
+          # Generate self-signed certificate
+          $cert = New-SelfSignedCertificate -Subject "CN=Green Meteor, O=Green Meteor, L=YourCity, S=YourState, C=YourCountry" -Type CodeSigningCert -CertStoreLocation Cert:\CurrentUser\My
+
+          # Export to PFX
+          $pwd = ConvertTo-SecureString -String $cert_password -Force -AsPlainText
+          Export-PfxCertificate -Cert "Cert:\CurrentUser\My\$($cert.Thumbprint)" -FilePath cert.pfx -Password $pwd
+        shell: pwsh
+
       - name: Build application
+        env:
+          CERTIFICATE_PASSWORD: ${{ env.CERTIFICATE_PASSWORD }}
         run: |
           npm run build
           electron-builder --win --publish never
@@ -52,12 +68,12 @@ jobs:
             const fs = require('fs');
             const path = require('path');
             const distPath = path.join(process.cwd(), 'dist');
-            
+
             const uploadAsset = async (file) => {
               const filePath = path.join(distPath, file);
               const fileStats = fs.statSync(filePath);
               const fileStream = fs.createReadStream(filePath);
-              
+
               await github.rest.repos.uploadReleaseAsset({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -70,7 +86,7 @@ jobs:
                 }
               });
             };
-            
+
             // Upload exe and msi files
             const files = fs.readdirSync(distPath);
             for (const file of files) {

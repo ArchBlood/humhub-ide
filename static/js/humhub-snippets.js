@@ -1,265 +1,172 @@
+/**
+ * HumHub Code Snippets
+ * This file contains commonly used code snippets for HumHub development
+ */
+
 module.exports = {
-  'humhub-module': `<?php
+  // PHP Snippets
+  'controller': `<?php
 
-namespace humhub\\modules\\${1:moduleName};
-
-use Yii;
-use yii\\helpers\\Url;
-
-/**
- * ${2:ModuleClass} defines the configuration and behavior of the ${1:moduleName} module.
- */
-class Module extends \\humhub\\components\\Module
-{
-    /**
-     * @inheritdoc
-     */
-    public $resourcesPath = 'resources';
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-
-        // Custom initialization code goes here
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getConfigUrl()
-    {
-        return Url::to(['/admin/module/config', 'id' => $this->id]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function disable()
-    {
-        // Cleanup all module data before disable the module
-        // $this->uninstallContent();
-        
-        parent::disable();
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    public function getPermissions($contentContainer = null)
-    {
-        if ($contentContainer) {
-            return [
-                new permissions\\${3:ViewContent}($contentContainer),
-            ];
-        }
-
-        return [];
-    }
-}`,
-
-  'humhub-widget': `<?php
-
-namespace humhub\\modules\\${1:moduleName}\\widgets;
-
-use Yii;
-use humhub\\libs\\Html;
-use humhub\\components\\Widget;
-
-/**
- * Widget for rendering ${2:widgetDescription}
- */
-class ${3:WidgetName} extends Widget
-{
-    /**
-     * @var object the content object
-     */
-    public $content;
-
-    /**
-     * @var boolean show title
-     */
-    public $showTitle = true;
-
-    /**
-     * @inheritdoc
-     */
-    public function run()
-    {
-        return $this->render('${4:viewName}', [
-            'content' => $this->content,
-            'showTitle' => $this->showTitle
-        ]);
-    }
-}`,
-
-  'humhub-activity': `<?php
-
-namespace humhub\\modules\\${1:moduleName}\\activities;
-
-use Yii;
-use humhub\\modules\\activity\\components\\BaseActivity;
-use humhub\\modules\\activity\\interfaces\\ConfigurableActivityInterface;
-
-/**
- * Activity for ${2:activityDescription}
- */
-class ${3:ActivityName} extends BaseActivity implements ConfigurableActivityInterface
-{
-    /**
-     * @inheritdoc
-     */
-    public $moduleId = '${1:moduleName}';
-
-    /**
-     * @inheritdoc
-     */
-    public $viewName = '${4:viewName}';
-
-    /**
-     * @inheritdoc
-     */
-    public function getTitle()
-    {
-        return Yii::t('${1:moduleName}Module.base', '${5:Activity Title}');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDescription()
-    {
-        return Yii::t('${1:moduleName}Module.base', '${6:Activity Description}');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getUrl()
-    {
-        return $this->source->getUrl();
-    }
-}`,
-
-  'humhub-controller': `<?php
-
-namespace humhub\\modules\\${1:moduleName}\\controllers;
+namespace humhub\\modules\\modulename\\controllers;
 
 use Yii;
 use humhub\\components\\Controller;
-use humhub\\modules\\content\\components\\ContentContainerController;
-use humhub\\modules\\${1:moduleName}\\models\\${2:ModelName};
 
-/**
- * ${3:ControllerName} handles the ${4:description} requests for the ${1:moduleName} module
- */
-class ${3:ControllerName} extends ContentContainerController
+class DefaultController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'acl' => [
-                'class' => \\humhub\\components\\behaviors\\AccessControl::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'permissions' => [\\humhub\\modules\\${1:moduleName}\\permissions\\${5:Permission}::class]
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * Index action
-     */
     public function actionIndex()
     {
-        return $this->render('index', [
-            'contentContainer' => $this->contentContainer
-        ]);
+        return $this->render('index');
     }
+}`,
 
-    /**
-     * Action to create a new ${2:ModelName}
-     */
-    public function actionCreate()
+  'model': `<?php
+
+namespace humhub\\modules\\modulename\\models;
+
+use Yii;
+use yii\\base\\Model;
+
+class SampleModel extends Model
+{
+    public $property1;
+    public $property2;
+
+    public function rules()
     {
-        $model = new ${2:ModelName}();
-        $model->content->container = $this->contentContainer;
+        return [
+            [['property1', 'property2'], 'required'],
+        ];
+    }
+}`,
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->view->success(Yii::t('${1:moduleName}Module.base', 'Successfully created!'));
-            return $this->redirect(['index', 'contentContainer' => $this->contentContainer]);
-        }
+  'widget': `<?php
 
-        return $this->render('create', [
-            'model' => $model,
-            'contentContainer' => $this->contentContainer
+namespace humhub\\modules\\modulename\\widgets;
+
+use yii\\base\\Widget;
+
+class SampleWidget extends Widget
+{
+    public $param;
+
+    public function run()
+    {
+        return $this->render('sampleWidget', [
+            'param' => $this->param
         ]);
     }
 }`,
 
-  'humhub-stream': `<?php
+  'migration': `<?php
 
-namespace humhub\\modules\\${1:moduleName}\\stream;
+use humhub\\components\\Migration;
 
-use Yii;
-use humhub\\modules\\content\\components\\ContentContainerStream;
-use humhub\\modules\\content\\models\\Content;
-use humhub\\modules\\${1:moduleName}\\models\\${2:ModelName};
-
-/**
- * Stream Action for ${2:ModelName}
- */
-class ${2:ModelName}StreamAction extends ContentContainerStream
+class m000000_000000_initial extends Migration
 {
-    /**
-     * @inheritdoc
-     */
-    protected function setupFilters()
+    public function up()
     {
-        parent::setupFilters();
+        $this->createTable('{{%tablename}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(100)->notNull(),
+            'description' => $this->text()->null(),
+            'created_at' => $this->dateTime()->notNull(),
+            'created_by' => $this->integer()->notNull(),
+            'updated_at' => $this->dateTime()->notNull(),
+            'updated_by' => $this->integer()->notNull(),
+        ]);
 
-        $this->activeQuery->andWhere(['content.object_model' => ${2:ModelName}::class]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getContentQuery()
-    {
-        $query = parent::getContentQuery();
-        $query->andWhere(['content.object_model' => ${2:ModelName}::class]);
-        
-        return $query;
+        $this->addForeignKey('fk_tablename_created_by', '{{%tablename}}', 'created_by', '{{%user}}', 'id', 'CASCADE');
+        $this->addForeignKey('fk_tablename_updated_by', '{{%tablename}}', 'updated_by', '{{%user}}', 'id', 'CASCADE');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function setupCriteria()
+    public function down()
     {
-        parent::setupCriteria();
-        
-        // Add custom criteria here
+        $this->dropTable('{{%tablename}}');
     }
-    
-    /**
-     * @inheritdoc
-     */
-    public function afterAction($action, $result)
-    {
-        $result = parent::afterAction($action, $result);
-        
-        // Modify the result if needed
-        
-        return $result;
-    }
-}`
+}`,
+
+  // JavaScript Snippets
+  'client-module': `humhub.module('modulename', function(module, require, $) {
+    const client = require('client');
+    const modal = require('ui.modal');
+
+    module.initOnPjaxLoad = true;
+
+    module.init = function() {
+        console.log('Module initialized');
+        // Your initialization code here
+    };
+
+    module.myFunction = function() {
+        // Function implementation
+    };
+
+    // Initialize module on document load
+    module.export({
+        init: module.init,
+        myFunction: module.myFunction
+    });
+});`,
+
+  'humhub-event': `// Register for HumHub event
+document.addEventListener('humhub:ready', function() {
+    // Your code to execute when HumHub is ready
+    console.log('HumHub is ready');
+});
+
+// Trigger custom event
+humhub.event.trigger('custom-event', {
+    data: 'value'
+});`,
+
+  // View Templates
+  'view-template': `<?php
+/**
+ * @var $this yii\\web\\View
+ */
+
+use humhub\\widgets\\Button;
+use yii\\helpers\\Html;
+use yii\\helpers\\Url;
+
+$this->title = 'Page Title';
+?>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <?= Html::encode($this->title) ?>
+    </div>
+    <div class="panel-body">
+        <!-- Your content here -->
+        <?= Button::primary('Submit')->action('submit')->submit() ?>
+    </div>
+</div>`,
+
+  // Event Handlers
+  'event-handler': `<?php
+
+namespace humhub\\modules\\modulename\\config;
+
+use humhub\\modules\\modulename\\Events;
+use humhub\\modules\\admin\\widgets\\AdminMenu;
+use humhub\\widgets\\TopMenu;
+
+return [
+    'id' => 'modulename',
+    'class' => 'humhub\\modules\\modulename\\Module',
+    'namespace' => 'humhub\\modules\\modulename',
+    'events' => [
+        [
+            'class' => TopMenu::class,
+            'event' => TopMenu::EVENT_INIT,
+            'callback' => [Events::class, 'onTopMenuInit']
+        ],
+        [
+            'class' => AdminMenu::class,
+            'event' => AdminMenu::EVENT_INIT,
+            'callback' => [Events::class, 'onAdminMenuInit']
+        ],
+    ]
+];`
 };

@@ -3,48 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <title>HumHub IDE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
   <div class="container">
-          <div class="sidebar">
-      <div class="file-explorer">
-        <h3>Explorer</h3>
-        <div id="file-tree">
-          <!-- File tree will go here -->
-          <div class="placeholder-text">Use File > Open to open a file</div>
+    <div class="main-content">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h3>PROJECT EXPLORER</h3>
+          <div class="sidebar-buttons">
+            <button class="sidebar-button" id="refresh-tree" title="Refresh">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="sidebar-button" id="new-file" title="New File">
+              <i class="fas fa-file"></i>
+            </button>
+            <button class="sidebar-button" id="new-folder" title="New Folder">
+              <i class="fas fa-folder-plus"></i>
+            </button>
+          </div>
         </div>
-      </div>
-      
-      <div class="snippets-panel">
-        <h3>Snippets</h3>
-        <div class="snippet-category">
-          <div class="category-header">HumHub Snippets</div>
-          <div class="snippet-list">
-            <div class="snippet-item" data-snippet="humhub-module">Module</div>
-            <div class="snippet-item" data-snippet="humhub-widget">Widget</div>
-            <div class="snippet-item" data-snippet="humhub-activity">Activity</div>
-            <div class="snippet-item" data-snippet="humhub-controller">Controller</div>
-            <div class="snippet-item" data-snippet="humhub-stream">Stream Action</div>
+        <div id="file-tree">
+          <!-- File tree will be generated here -->
+        </div>
+        <div id="snippets-container">
+          <!-- Added snippets container as per CSS -->
+          <div class="no-snippets">No snippets available</div>
+        </div>
+        <div class="module-generator">
+          <h4>HUMHUB MODULE GENERATOR</h4>
+          <div class="module-form">
+            <div class="form-group">
+              <label for="module-name">Module Name</label>
+              <input type="text" id="module-name" placeholder="e.g. mymodule">
+            </div>
+            <div class="form-group">
+              <label for="module-type">Module Type</label>
+              <select id="module-type">
+                <option value="basic">Basic Module</option>
+                <option value="content">Content Module</option>
+                <option value="widget">Widget Module</option>
+                <option value="dashboard">Dashboard Module</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="module-author">Author</label>
+              <input type="text" id="module-author" placeholder="Your Name">
+            </div>
+            <div class="form-actions">
+              <button id="generate-module">Generate Module</button>
+            </div>
           </div>
         </div>
       </div>
+      <div class="resizer" id="sidebar-resizer"></div>
+      <div class="editor-container" id="editor-container"></div>
     </div>
-    <div class="main-content">
-      <div class="tabs">
-        <div class="tab active">untitled</div>
-      </div>
-      <div class="editor-container">
-        <textarea id="editor" spellcheck="false"></textarea>
-        <div class="line-numbers" id="line-numbers"></div>
-      </div>
-      <div class="status-bar">
-        <div class="status-item" id="cursor-position">Ln 1, Col 1</div>
-        <div class="status-item" id="file-type">Plain Text</div>
-      </div>
+    <div class="status-bar">
+      <span id="file-path">No file open</span>
+      <span id="file-type"></span>
     </div>
   </div>
-  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/php/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/yaml/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
   <script src="static/js/renderer.js"></script>
 </body>
 </html>
