@@ -26,7 +26,6 @@
   "build": {
     "appId": "net.greenmeteor.ide",
     "productName": "HumHub IDE",
-    "publisherName": "Green Meteor",
     "copyright": "Copyright © 2025 Green Meteor",
     "directories": {
       "output": "dist"
@@ -38,7 +37,8 @@
       "target": "nsis",
       "certificateFile": "./cert.pfx",
       "certificatePassword": "${CERTIFICATE_PASSWORD}",
-      "signingHashAlgorithms": ["sha256"]
+      "signingHashAlgorithms": ["sha256"],
+      "publisherName": "Green Meteor"
     },
     "linux": {
       "target": [
