@@ -45,7 +45,7 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ env.CERTIFICATE_PASSWORD }}
         run: |
           npm run build
-          electron-builder --win --publish never --config.win.signtoolOptions.certificateFile="cert.pfx" --config.win.signtoolOptions.certificatePassword="$CERTIFICATE_PASSWORD"
+          electron-builder --win --publish never --config.win.certificatePassword="$CERTIFICATE_PASSWORD"
 
       - name: Get release info (GitHub API)
         id: get_release
