@@ -35,10 +35,12 @@
     },
     "win": {
       "target": "nsis",
-      "certificateFile": "./cert.pfx",
-      "certificatePassword": "${CERTIFICATE_PASSWORD}",
-      "signingHashAlgorithms": ["sha256"],
-      "publisherName": "Green Meteor"
+      "signtoolOptions": {
+        "certificateFile": "./cert.pfx",
+        "certificatePassword": "${CERTIFICATE_PASSWORD}",
+        "signingHashAlgorithms": ["sha256"],
+        "publisherName": "Green Meteor"
+      }
     },
     "linux": {
       "target": [
