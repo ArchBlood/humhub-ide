@@ -20,7 +20,7 @@
     "codemirror": "^5.65.3"
   },
   "devDependencies": {
-    "electron": "^22.0.0",
+    "electron": "^28.3.2",
     "electron-builder": "^25.1.8"
   },
   "build": {
